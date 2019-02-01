@@ -22,7 +22,7 @@ namespace Utn.PWA.Services.Services
             userRepository = repository;
         }
 
-        public UsersDTO Authenticate(UserLoginDTO userLogin)
+        public string Authenticate(UserLoginDTO userLogin)
         {
             var user = userRepository.Authenticate(userLogin);
 
@@ -38,18 +38,18 @@ namespace Utn.PWA.Services.Services
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, user.Dni),
-                    new Claim(ClaimTypes.Role, user.Rol.Name)
+                    new Claim(ClaimTypes.Role, user.Rol.Name),
+                    //new Claim(ClaimTypes.)
                 }),
                 Expires = DateTime.UtcNow.AddDays(14),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
 
             // remove password before returning
             user.Password = null;
 
-            return user;
+            return tokenHandler.WriteToken(token);
         }
 
     }

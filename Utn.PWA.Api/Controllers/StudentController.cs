@@ -66,7 +66,6 @@ namespace Utn.PWA.Api.Controllers
             }
         }
 
-
         [HttpPost]
         [Produces("application/json", Type = typeof(bool))]
         public IActionResult Post([FromBody]StudentDTO student)

@@ -4,6 +4,6 @@ namespace Utn.PWA.Services.Interfaces
 {
     public interface IUserService
     {
-        UsersDTO Authenticate(UserLoginDTO userLogin);
+        string Authenticate(UserLoginDTO userLogin);
     }
 }

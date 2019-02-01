@@ -22,12 +22,12 @@ namespace Utn.PWA.Api.Controllers
         [HttpPost("Auth")]
         public IActionResult Authenticate([FromBody]UserLoginDTO userParam)
         {
-            var user = userService.Authenticate(userParam);
+            var token = userService.Authenticate(userParam);
 
-            if (user == null)
+            if (token == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            return Ok(user);
+            return Ok(token);
         }
 
         [HttpGet, Authorize(Roles = "Administrador")]
