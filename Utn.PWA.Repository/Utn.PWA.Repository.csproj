@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utn.PWA.DTOs\Utn.PWA.DTOs.csproj" />
+    <ProjectReference Include="..\Utn.PWA.Entity\Utn.PWA.Entity.csproj" />
+  </ItemGroup>
+
+</Project>
