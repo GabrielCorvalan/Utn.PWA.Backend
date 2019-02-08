@@ -26,11 +26,9 @@ namespace Utn.PWA.Services.Services
         {
             var user = userRepository.Authenticate(userLogin);
 
-            // return null if user not found
             if (user == null)
                 return null;
-
-            // authentication successful so generate jwt token
+            
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -39,14 +37,13 @@ namespace Utn.PWA.Services.Services
                 {
                     new Claim(ClaimTypes.Name, user.Dni),
                     new Claim(ClaimTypes.Role, user.Rol.Name),
-                    //new Claim(ClaimTypes.)
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(14),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            // remove password before returning
             user.Password = null;
 
             return tokenHandler.WriteToken(token);

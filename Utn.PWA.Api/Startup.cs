@@ -89,7 +89,7 @@ namespace Utn.PWA.Api
             {
                 app.UseHsts();
             }
-
+            app.UseCors("AllowMyOrigin");
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();

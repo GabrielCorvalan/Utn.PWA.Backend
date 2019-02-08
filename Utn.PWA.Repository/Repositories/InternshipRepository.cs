@@ -21,10 +21,11 @@ namespace Utn.PWA.Repository.Repositories
         {
             using (var ctx = new Utn_SysContext())
             {
-                return ctx.Interships.AsNoTracking()
-                                    .Select(s =>
-                                        _mapper.Map<InternshipDTO>(s)
-                                    ).ToList();
+                return ctx.Interships.AsNoTracking().Include(s => s.Student)
+                                        .Include(s => s.Company).Include(s => s.CompanyTutor)
+                                            .Select(s =>
+                                                _mapper.Map<InternshipDTO>(s)
+                                            ).ToList();
             }
         }
 
@@ -46,7 +47,7 @@ namespace Utn.PWA.Repository.Repositories
                 return true;
             }
         }
-        public bool CreateOrUpdate(InternshipDTO internship)
+        public bool CreateOrUpdate(InternshipDTO internship, int userId)
         {
             try
             {
@@ -60,18 +61,27 @@ namespace Utn.PWA.Repository.Repositories
                     {
                         oInternship = new Interships();
                         ctx.Interships.Add(oInternship);
+                        oInternship.CreatedDate = DateTime.Now;
+                        oInternship.State = "Nueva";
+                        oInternship.UserCreatedId = userId;
                     }
                     else
                     {
                         ctx.Interships.Attach(oInternship);
+                        oInternship.LastModified = DateTime.Now;
+                        oInternship.UserLasModifiedId = userId;
                     }
+                    oInternship.DailyHours = internship.DailyHours;
+                    oInternship.WorkAgreement = internship.WorkAgreement;
+                    oInternship.CompanyTutorId = internship.CompanyMentorId;
+                    oInternship.CompanySignatory = internship.CompanySignatory;
                     oInternship.SalaryWorkAssignment = internship.SalaryWorkAssignment;
                     oInternship.StartDate = internship.StartDate;
                     oInternship.EndDate = internship.EndDate;
                     oInternship.StudentId = internship.StudentId;
                     oInternship.TaskDescription = internship.TaskDescription;
                     oInternship.CompanyId = internship.CompanyId;
-                    oInternship.Deleted = false;
+                    oInternship.Observations = internship.Observations;
 
                     ctx.SaveChanges();
                     return true;
@@ -80,6 +90,57 @@ namespace Utn.PWA.Repository.Repositories
             catch (Exception ex)
             {
                 return false;
+            }
+        }
+
+        public bool CancelInternship(string cancelationDescription, int internshipId, int userId, DateTime? cancelationDate)
+        {
+            try
+            {
+                using (var ctx = new Utn_SysContext())
+                {
+                    var oInternship = ctx.Interships.Where(i => i.Id.Equals(internshipId)).FirstOrDefault();
+
+                    if(oInternship.Equals(null))
+                    {
+                        return false;
+                    }
+
+                    ctx.Interships.Attach(oInternship);
+                    oInternship.State = "Cancelada";
+                    oInternship.CancellationDescription = cancelationDescription;
+                    oInternship.CancellationDate = cancelationDate ?? DateTime.Now;
+                    oInternship.UserCancelattionId = userId;
+
+                    ctx.SaveChanges();
+                    return true;
+                    
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool RenoveInternship(int userId, int internshipId, DateTime? renovationDate)
+        {
+            using (var ctx = new Utn_SysContext())
+            {
+                var oInternship = ctx.Interships.Where(i => i.Id.Equals(internshipId)).FirstOrDefault();
+
+                if (oInternship.Equals(null))
+                {
+                    return false;
+                }
+
+                ctx.Interships.Attach(oInternship);
+                oInternship.State = "Renovada";
+                oInternship.UserRenovationId = userId;
+                oInternship.RenovationDate = renovationDate ?? DateTime.Now;
+                ctx.SaveChanges();
+                return true;
+
             }
         }
 

@@ -2,7 +2,7 @@
 
 namespace Utn.PWA.DTOs
 {
-    public class CompanyMentorDTO : BaseDTO
+    public class CompanyTutorDTO : BaseDTO
     {
         public string Names { get; set; }
         public string Surnames { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Utn.PWA.DTOs;
 
 namespace Utn.PWA.Repository.Interfaces
@@ -7,7 +8,9 @@ namespace Utn.PWA.Repository.Interfaces
     {
         List<InternshipDTO> GetAllInternships();
         InternshipDTO GetInternshipById(int Id);
-        bool CreateOrUpdate(InternshipDTO internship);
+        bool CreateOrUpdate(InternshipDTO internship, int userId);
         bool Delete(InternshipDTO internship);
+        bool CancelInternship(string cancelationDescription, int internshipId, int userId, DateTime? cancelationDate);
+        bool RenoveInternship(int internshipId, int userId, DateTime? renovationDate);
     }
 }

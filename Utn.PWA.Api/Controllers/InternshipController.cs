@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Utn.PWA.DTOs;
 using Utn.PWA.Services.Interfaces;
@@ -9,7 +13,7 @@ namespace Utn.PWA.Api.Controllers
 {
     [EnableCors("AllowMyOrigin")]
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize]
     public class InternshipController : ControllerBase
     {
         private readonly IInternshipService internshipService;
@@ -72,11 +76,46 @@ namespace Utn.PWA.Api.Controllers
         {
             try
             {
-                return Ok(internshipService.CreateOrUpdate(internship));
+                var Id = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value;
+                
+                return Ok(internshipService.CreateOrUpdate(internship, Id));
             }
             catch (Exception ex)
             {
 
+                throw ex;
+            }
+        }
+
+        [HttpPost("Cancel/{id}")]
+        [Produces("application/json", Type = typeof(bool))]
+        public IActionResult CancelInternship([FromForm]string cancelationDescription, int id, [FromForm]DateTime? cancelationDate = null)
+        {
+            try
+            {
+
+                var userId = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value;
+
+                return Ok(internshipService.CancelInternship(cancelationDescription, id, int.Parse(userId), cancelationDate));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost("Renove/{id}")]
+        [Produces("application/json", Type = typeof(bool))]
+        public IActionResult RenoveInternship(int id, [FromForm]DateTime? renovationDate = null)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value;
+
+                return Ok(internshipService.RenoveInternship(id, int.Parse(userId), renovationDate));
+            }
+            catch (Exception ex)
+            {
                 throw ex;
             }
         }

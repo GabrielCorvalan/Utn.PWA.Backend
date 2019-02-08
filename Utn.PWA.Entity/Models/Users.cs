@@ -7,10 +7,10 @@ namespace Utn.PWA.Entity.Models
     {
         public Users()
         {
-            IntershipsUserCancelattionNavigation = new HashSet<Interships>();
-            IntershipsUserCreatedNavigation = new HashSet<Interships>();
-            IntershipsUserLasModifiedNavigation = new HashSet<Interships>();
-            IntershipsUserRenovationNavigation = new HashSet<Interships>();
+            IntershipsUserCancelattion = new HashSet<Interships>();
+            IntershipsUserCreated = new HashSet<Interships>();
+            IntershipsUserLasModified = new HashSet<Interships>();
+            IntershipsUserRenovation = new HashSet<Interships>();
         }
 
         public int Id { get; set; }
@@ -28,9 +28,9 @@ namespace Utn.PWA.Entity.Models
         public bool Deleted { get; set; }
 
         public Rols Rol { get; set; }
-        public ICollection<Interships> IntershipsUserCancelattionNavigation { get; set; }
-        public ICollection<Interships> IntershipsUserCreatedNavigation { get; set; }
-        public ICollection<Interships> IntershipsUserLasModifiedNavigation { get; set; }
-        public ICollection<Interships> IntershipsUserRenovationNavigation { get; set; }
+        public ICollection<Interships> IntershipsUserCancelattion { get; set; }
+        public ICollection<Interships> IntershipsUserCreated { get; set; }
+        public ICollection<Interships> IntershipsUserLasModified { get; set; }
+        public ICollection<Interships> IntershipsUserRenovation { get; set; }
     }
 }

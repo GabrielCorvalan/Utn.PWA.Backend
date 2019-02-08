@@ -22,6 +22,15 @@ namespace Utn.PWA.Api.AutoMapper
 
             CreateMap<Companies, CompanyDTO>();
             CreateMap<CompanyDTO, Companies>();
+
+            CreateMap<Users, UsersDTO>();
+            CreateMap<UsersDTO, Users>();
+
+            CreateMap<Rols, RolDTO>();
+            CreateMap<RolDTO, Rols>();
+
+            CreateMap<CompanyTutor, CompanyTutorDTO>();
+            CreateMap<CompanyTutorDTO, CompanyTutor>();
         }
     }
 }

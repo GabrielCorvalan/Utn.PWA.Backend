@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Utn.PWA.DTOs;
 using Utn.PWA.Entity.Models;
@@ -15,36 +16,14 @@ namespace Utn.PWA.Repository.Repositories
         }
         public UsersDTO Authenticate(UserLoginDTO user)
         {
-            if (user.Dni != "40475304" && user.Password != "123")
+            using (var ctx = new Utn_SysContext())
             {
-                return new UsersDTO()
-                {
-                    Id = 1000,
-                    Address = "Brasil 2693",
-                    Birthdate = new System.DateTime(),
-                    Cuil = "404753046",
-                    Deleted = false,
-                    Dni = "40475304",
-                    Email = "Gabrielcn6@gmail.com",
-                    Names = "Gabriel Gonzalo",
-                    Password = "xxxxxxxxx",
-                    Rol = new RolDTO { Deleted = false, Id = 1000, Name = "Admin" },
-                    RolId = 1000,
-                    Sex = "Masculino",
-                    Surnames = "Corvalan",
-                    UniversityPosition = "Estudiante",
-                    Token = null
-                };
-            } else
-            {
-                return null;
+                return _mapper.Map<UsersDTO>(
+                            ctx.Users.Where(u => u.Dni == user.Dni && u.Password == user.Password)
+                                        .Include(u => u.Rol)
+                                            .FirstOrDefault()
+                        );
             }
-            //using (var ctx = new Utn_SysContext())
-            //{
-            //    return _mapper.Map<UsersDTO>(
-            //                ctx.Users.SingleOrDefault(x => x.Dni == user.Dni && x.Password == user.Password)
-            //            );
-            //}
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Utn.PWA.Api.Controllers
 {
     [EnableCors("AllowMyOrigin")]
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize]
     public class CareerController : ControllerBase
     {
         private readonly ICareerService careerService;
@@ -48,7 +49,7 @@ namespace Utn.PWA.Api.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "Administrador")]
         [Produces("application/json", Type = typeof(bool))]
         public IActionResult Delete(int Id)
         {
@@ -66,7 +67,7 @@ namespace Utn.PWA.Api.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Administrador")]
         [Produces("application/json", Type = typeof(bool))]
         public IActionResult Post([FromBody]CareerDTO career)
         {

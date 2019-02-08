@@ -11,22 +11,22 @@ namespace Utn.PWA.Api.Controllers
     [EnableCors("AllowMyOrigin")]
     [Route("api/[controller]")]
     [ApiController, Authorize]
-    public class CompanyController : ControllerBase
+    public class CompanyTutorController : ControllerBase
     {
-        private readonly ICompanyService companyService;
+        private readonly ICompanyTutorService companyTutorService;
 
-        public CompanyController(ICompanyService service)
+        public CompanyTutorController(ICompanyTutorService service)
         {
-            companyService = service;
+            companyTutorService = service;
         }
 
         [HttpGet]
-        [Produces("application/json", Type = typeof(IEnumerable<CompanyDTO>))]
-        public IActionResult GetAllCompanies()
+        [Produces("application/json", Type = typeof(IEnumerable<CompanyTutorDTO>))]
+        public IActionResult GetAllCompanyTutors()
         {
             try
             {
-                return Ok(companyService.GetAllCompanies());
+                return Ok(companyTutorService.GetAllCompanyTutors());
             }
             catch (Exception ex)
             {
@@ -35,12 +35,12 @@ namespace Utn.PWA.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        [Produces("application/json", Type = typeof(CompanyDTO))]
-        public IActionResult GetCompanyById(int id)
+        [Produces("application/json", Type = typeof(CompanyTutorDTO))]
+        public IActionResult GetCompanyTutorById(int id)
         {
             try
             {
-                return Ok(companyService.GetCompanyById(id));
+                return Ok(companyTutorService.GetCompanyTutorById(id));
             }
             catch (Exception)
             {
@@ -48,17 +48,16 @@ namespace Utn.PWA.Api.Controllers
                 throw;
             }
         }
-        //(Roles = "Administrador")
+
         [HttpDelete("{id}")]
-        //[Authorize]
         [Produces("application/json", Type = typeof(bool))]
         public IActionResult Delete(int Id)
         {
             try
             {
-                var company = companyService.GetCompanyById(Id);
+                var companyTutor = companyTutorService.GetCompanyTutorById(Id);
 
-                return Ok(companyService.Delete(company));
+                return Ok(companyTutorService.Delete(companyTutor));
             }
             catch (Exception ex)
             {
@@ -69,14 +68,12 @@ namespace Utn.PWA.Api.Controllers
 
 
         [HttpPost]
-        //(Roles = "Administrador")
-        //[Authorize]
         [Produces("application/json", Type = typeof(bool))]
-        public IActionResult Post([FromBody]CompanyDTO company)
+        public IActionResult Post([FromBody]CompanyTutorDTO companyTutor)
         {
             try
             {
-                return Ok(companyService.CreateOrUpdate(company));
+                return Ok(companyTutorService.CreateOrUpdate(companyTutor));
             }
             catch (Exception ex)
             {

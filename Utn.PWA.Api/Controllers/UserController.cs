@@ -6,8 +6,8 @@ using Utn.PWA.Services.Interfaces;
 
 namespace Utn.PWA.Api.Controllers
 {
-    [Route("api/[controller]")]
     [EnableCors("AllowMyOrigin")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {

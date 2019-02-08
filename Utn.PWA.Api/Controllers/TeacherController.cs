@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Utn.PWA.DTOs;
@@ -9,7 +10,7 @@ namespace Utn.PWA.Api.Controllers
 {
     [EnableCors("AllowMyOrigin")]
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController, Authorize]
     public class TeacherController : ControllerBase
     {
         private readonly ITeacherService teacherService;

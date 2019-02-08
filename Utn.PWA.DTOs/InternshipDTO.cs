@@ -28,7 +28,7 @@ namespace Utn.PWA.DTOs
         public string State { get; set; }
 
         public CompanyDTO Company { get; set; }
-        public CompanyMentorDTO CompanyMentor { get; set; }
+        public CompanyTutorDTO CompanyTutor { get; set; }
         public StudentDTO Student { get; set; }
     }
 }

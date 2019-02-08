@@ -7,7 +7,7 @@ namespace Utn.PWA.Entity.Models
     {
         public Companies()
         {
-            CompanyMentor = new HashSet<CompanyMentor>();
+            CompanyTutor = new HashSet<CompanyTutor>();
             Interships = new HashSet<Interships>();
         }
 
@@ -18,7 +18,7 @@ namespace Utn.PWA.Entity.Models
         public bool Deleted { get; set; }
         public string Address { get; set; }
 
-        public ICollection<CompanyMentor> CompanyMentor { get; set; }
+        public ICollection<CompanyTutor> CompanyTutor { get; set; }
         public ICollection<Interships> Interships { get; set; }
     }
 }

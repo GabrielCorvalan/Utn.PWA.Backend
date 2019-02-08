@@ -30,6 +30,9 @@ namespace Utn.PWA.Api.Middlewares
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserRepository, UserRepository>();
 
+            services.AddTransient<ICompanyTutorService, CompanyTutorService>();
+            services.AddTransient<ICompanyTutorRepository, CompanyTutorRepository>();
+
             return services;
         }
     }

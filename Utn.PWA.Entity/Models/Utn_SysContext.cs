@@ -17,8 +17,10 @@ namespace Utn.PWA.Entity.Models
 
         public virtual DbSet<Careers> Careers { get; set; }
         public virtual DbSet<Companies> Companies { get; set; }
-        public virtual DbSet<CompanyMentor> CompanyMentor { get; set; }
+        public virtual DbSet<CompanyTutor> CompanyTutor { get; set; }
         public virtual DbSet<Interships> Interships { get; set; }
+        public virtual DbSet<Pages> Pages { get; set; }
+        public virtual DbSet<PagesRols> PagesRols { get; set; }
         public virtual DbSet<Rols> Rols { get; set; }
         public virtual DbSet<Students> Students { get; set; }
         public virtual DbSet<Teachers> Teachers { get; set; }
@@ -28,7 +30,7 @@ namespace Utn.PWA.Entity.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=Utn_Sys;Integrated Security=True");
             }
         }
@@ -70,14 +72,14 @@ namespace Utn.PWA.Entity.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<CompanyMentor>(entity =>
+            modelBuilder.Entity<CompanyTutor>(entity =>
             {
                 entity.HasIndex(e => e.Cuil)
-                    .HasName("Unique_CompanyM_Cuil")
+                    .HasName("Unique_CompanyT_Cuil")
                     .IsUnique();
 
                 entity.HasIndex(e => e.Dni)
-                    .HasName("Unique_CompanyM_Person")
+                    .HasName("Unique_CompanyT_Person")
                     .IsUnique();
 
                 entity.Property(e => e.Birthdate).HasColumnType("date");
@@ -112,9 +114,9 @@ namespace Utn.PWA.Entity.Models
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Company)
-                    .WithMany(p => p.CompanyMentor)
+                    .WithMany(p => p.CompanyTutor)
                     .HasForeignKey(d => d.CompanyId)
-                    .HasConstraintName("FK__CompanyMe__Compa__5629CD9C");
+                    .HasConstraintName("FK__CompanyTu__Compa__5DCAEF64");
             });
 
             modelBuilder.Entity<Interships>(entity =>
@@ -167,37 +169,75 @@ namespace Utn.PWA.Entity.Models
                 entity.HasOne(d => d.Company)
                     .WithMany(p => p.Interships)
                     .HasForeignKey(d => d.CompanyId)
-                    .HasConstraintName("FK__Intership__Compa__5AEE82B9");
+                    .HasConstraintName("FK__Intership__Compa__628FA481");
 
-                entity.HasOne(d => d.CompanyMentor)
+                entity.HasOne(d => d.CompanyTutor)
                     .WithMany(p => p.Interships)
-                    .HasForeignKey(d => d.CompanyMentorId)
-                    .HasConstraintName("FK__Intership__Compa__5BE2A6F2");
+                    .HasForeignKey(d => d.CompanyTutorId)
+                    .HasConstraintName("FK__Intership__Compa__6383C8BA");
 
                 entity.HasOne(d => d.Student)
                     .WithMany(p => p.Interships)
                     .HasForeignKey(d => d.StudentId)
-                    .HasConstraintName("FK__Intership__Stude__59FA5E80");
+                    .HasConstraintName("FK__Intership__Stude__619B8048");
 
-                entity.HasOne(d => d.UserCancelattionNavigation)
-                    .WithMany(p => p.IntershipsUserCancelattionNavigation)
-                    .HasForeignKey(d => d.UserCancelattion)
-                    .HasConstraintName("FK__Intership__UserC__5EBF139D");
+                entity.HasOne(d => d.UserCancelattion)
+                    .WithMany(p => p.IntershipsUserCancelattion)
+                    .HasForeignKey(d => d.UserCancelattionId)
+                    .HasConstraintName("FK__Intership__UserC__66603565");
 
-                entity.HasOne(d => d.UserCreatedNavigation)
-                    .WithMany(p => p.IntershipsUserCreatedNavigation)
-                    .HasForeignKey(d => d.UserCreated)
-                    .HasConstraintName("FK__Intership__UserC__5CD6CB2B");
+                entity.HasOne(d => d.UserCreated)
+                    .WithMany(p => p.IntershipsUserCreated)
+                    .HasForeignKey(d => d.UserCreatedId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Intership__UserC__6477ECF3");
 
-                entity.HasOne(d => d.UserLasModifiedNavigation)
-                    .WithMany(p => p.IntershipsUserLasModifiedNavigation)
-                    .HasForeignKey(d => d.UserLasModified)
-                    .HasConstraintName("FK__Intership__UserL__5DCAEF64");
+                entity.HasOne(d => d.UserLasModified)
+                    .WithMany(p => p.IntershipsUserLasModified)
+                    .HasForeignKey(d => d.UserLasModifiedId)
+                    .HasConstraintName("FK__Intership__UserL__656C112C");
 
-                entity.HasOne(d => d.UserRenovationNavigation)
-                    .WithMany(p => p.IntershipsUserRenovationNavigation)
-                    .HasForeignKey(d => d.UserRenovation)
-                    .HasConstraintName("FK__Intership__UserR__5FB337D6");
+                entity.HasOne(d => d.UserRenovation)
+                    .WithMany(p => p.IntershipsUserRenovation)
+                    .HasForeignKey(d => d.UserRenovationId)
+                    .HasConstraintName("FK__Intership__UserR__6754599E");
+            });
+
+            modelBuilder.Entity<Pages>(entity =>
+            {
+                entity.Property(e => e.Description)
+                    .HasMaxLength(60)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Icon)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Tittle)
+                    .HasMaxLength(40)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<PagesRols>(entity =>
+            {
+                entity.HasKey(e => new { e.PageId, e.RolId });
+
+                entity.HasOne(d => d.Page)
+                    .WithMany(p => p.PagesRols)
+                    .HasForeignKey(d => d.PageId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__PagesRols__PageI__412EB0B6");
+
+                entity.HasOne(d => d.Rol)
+                    .WithMany(p => p.PagesRols)
+                    .HasForeignKey(d => d.RolId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__PagesRols__RolId__4222D4EF");
             });
 
             modelBuilder.Entity<Rols>(entity =>
@@ -266,12 +306,12 @@ namespace Utn.PWA.Entity.Models
                 entity.HasOne(d => d.Career)
                     .WithMany(p => p.Students)
                     .HasForeignKey(d => d.CareerId)
-                    .HasConstraintName("FK__Students__Career__49C3F6B7");
+                    .HasConstraintName("FK__Students__Career__5165187F");
 
                 entity.HasOne(d => d.TeacherGuide)
                     .WithMany(p => p.Students)
                     .HasForeignKey(d => d.TeacherGuideId)
-                    .HasConstraintName("FK__Students__Teache__4AB81AF0");
+                    .HasConstraintName("FK__Students__Teache__52593CB8");
             });
 
             modelBuilder.Entity<Teachers>(entity =>
@@ -381,7 +421,7 @@ namespace Utn.PWA.Entity.Models
                 entity.HasOne(d => d.Rol)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.RolId)
-                    .HasConstraintName("FK__Users__RolId__398D8EEE");
+                    .HasConstraintName("FK__Users__RolId__3D5E1FD2");
             });
         }
     }
