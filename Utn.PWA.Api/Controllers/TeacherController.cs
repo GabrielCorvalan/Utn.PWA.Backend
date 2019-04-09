@@ -34,6 +34,20 @@ namespace Utn.PWA.Api.Controllers
             }
         }
 
+        [HttpGet("ByFilter")]
+        [Produces("application/json", Type = typeof(IEnumerable<TeacherDTO>))]
+        public IActionResult GetTeachersByFilter([FromQuery(Name = "filter")]string filter)
+        {
+            try
+            {
+                return Ok(teacherService.GetTeachersByFilter(filter));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         [HttpGet("{id}")]
         [Produces("application/json", Type = typeof(TeacherDTO))]
         public IActionResult GetTeacherById(int id)

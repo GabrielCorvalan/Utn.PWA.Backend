@@ -7,6 +7,7 @@ namespace Utn.PWA.Services.Interfaces
     {
         List<TeacherDTO> GetAllTeachers();
         TeacherDTO GetTeacherById(int Id);
+        List<TeacherDTO> GetTeachersByFilter(string filter);
         bool CreateOrUpdate(TeacherDTO teacher);
         bool Delete(TeacherDTO teacher);
     }

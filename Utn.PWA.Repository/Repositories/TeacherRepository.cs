@@ -28,6 +28,15 @@ namespace Utn.PWA.Repository.Repositories
             }
         }
 
+        public List<TeacherDTO> GetTeachersByFilter(string filter)
+        {
+            using (var ctx = new Utn_SysContext())
+            {
+                return ctx.Teachers.Where(t => t.Names.Contains(filter) || t.Surnames.Contains(filter) || t.File.Contains(filter))
+                            .Select(s => _mapper.Map<TeacherDTO>(s)).ToList();
+            }
+        }
+
         public TeacherDTO GetTeacherById(int Id)
         {
             using (var ctx = new Utn_SysContext())
