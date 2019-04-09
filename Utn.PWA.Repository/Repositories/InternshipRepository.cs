@@ -144,5 +144,18 @@ namespace Utn.PWA.Repository.Repositories
             }
         }
 
+        public List<InternshipDTO> GetInternshipsByCareer(int careerId)
+        {
+            using (var ctx = new Utn_SysContext())
+            {
+               return ctx.Interships.Where(i => i.Student.CareerId == careerId).
+                                            AsNoTracking().Include(s => s.Student)
+                                                .Include(s => s.Company).Include(s => s.CompanyTutor)
+                                                    .Select(s =>
+                                                        _mapper.Map<InternshipDTO>(s)
+                                                    ).ToList();
+            }
+        }
+
     }
 }
