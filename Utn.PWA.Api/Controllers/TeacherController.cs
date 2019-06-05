@@ -10,7 +10,7 @@ namespace Utn.PWA.Api.Controllers
 {
     [EnableCors("AllowMyOrigin")]
     [Route("api/[controller]")]
-    [ApiController, Authorize]
+    [ApiController]
     public class TeacherController : ControllerBase
     {
         private readonly ITeacherService teacherService;
@@ -27,6 +27,20 @@ namespace Utn.PWA.Api.Controllers
             try
             {
                 return Ok(teacherService.GetAllTeachers());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet("ByFilter")]
+        [Produces("application/json", Type = typeof(IEnumerable<TeacherDTO>))]
+        public IActionResult GetTeacherByFilter([FromQuery] string filter)
+        {
+            try
+            {
+                return Ok(teacherService.GetTeacherByFilter(filter));
             }
             catch (Exception ex)
             {

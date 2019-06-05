@@ -9,5 +9,6 @@ namespace Utn.PWA.Repository.Interfaces
         TeacherDTO GetTeacherById(int Id);
         bool CreateOrUpdate(TeacherDTO teacher);
         bool Delete(TeacherDTO teacher);
+        List<TeacherDTO> GetTeacherByFilter(string filter);
     }
 }

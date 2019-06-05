@@ -10,7 +10,7 @@ namespace Utn.PWA.Api.Controllers
 {
     [EnableCors("AllowMyOrigin")]
     [Route("api/[controller]")]
-    [ApiController, Authorize]
+    [ApiController]
     public class StudentController : ControllerBase
     {
         private readonly IStudentService studentService;

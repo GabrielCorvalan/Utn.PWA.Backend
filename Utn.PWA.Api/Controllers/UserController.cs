@@ -30,7 +30,7 @@ namespace Utn.PWA.Api.Controllers
             return Ok(token);
         }
 
-        [HttpGet, Authorize(Roles = "Administrador")]
+        [HttpGet]
         public IActionResult Get()
         {
             return Ok("Hello");

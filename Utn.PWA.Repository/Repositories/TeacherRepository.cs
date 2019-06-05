@@ -37,6 +37,18 @@ namespace Utn.PWA.Repository.Repositories
                                         .FirstOrDefault());
             }
         }
+        public List<TeacherDTO> GetTeacherByFilter(string filter) {
+            using (var ctx = new Utn_SysContext())
+            {   
+                return ctx.Teachers.Where(x => x.Names.Contains(filter)
+                                            || x.Surnames.Contains(filter)
+                                            || x.Email.Contains(filter)
+                                            || x.Dni.Contains(filter))
+                        .Select(x =>
+                            _mapper.Map<TeacherDTO>(x)
+                        ).ToList();
+            }
+        }
         public bool Delete(TeacherDTO teacher)
         {
             using (var ctx = new Utn_SysContext())

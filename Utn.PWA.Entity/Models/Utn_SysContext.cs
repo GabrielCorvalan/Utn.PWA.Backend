@@ -31,7 +31,7 @@ namespace Utn.PWA.Entity.Models
             if (!optionsBuilder.IsConfigured)
             {
 //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=Utn_Sys;Integrated Security=True");
+                optionsBuilder.UseSqlServer("Server=tcp:utnfrgp.database.windows.net,1433;Initial Catalog=PASANTIAS_UTNFRGP;Persist Security Info=False;User ID=gabrielcn6;Password=$Utnfrgp%;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 

@@ -18,6 +18,11 @@ namespace Utn.PWA.Services.Services
             return teacherRepo.CreateOrUpdate(teacher);
         }
 
+        public List<TeacherDTO> GetTeacherByFilter(string filter) 
+        {
+            return teacherRepo.GetTeacherByFilter(filter);
+        }
+
         public List<TeacherDTO> GetAllTeachers()
         {
             return teacherRepo.GetAllTeachers();
