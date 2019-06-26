@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Utn.PWA.DTOs\Utn.PWA.DTOs.csproj" />
     <ProjectReference Include="..\Utn.PWA.Entity\Utn.PWA.Entity.csproj" />
+    <ProjectReference Include="..\Utn.PWA.Helpers\Utn.Pwa.Helpers.csproj" />
   </ItemGroup>
 
 </Project>

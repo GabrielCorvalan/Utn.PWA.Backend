@@ -19,6 +19,11 @@ namespace Utn.PWA.Services.Services
             return internshipRepo.CreateOrUpdate(internship, int.Parse(userId));
         }
 
+        public List<InternshipDTO> FilterGetAllInternship(InternshipFilterDTO filter)
+        {
+            return internshipRepo.FilterGetAllInternship(filter);
+        }
+
         public List<InternshipDTO> GetAllInternships()
         {
             return internshipRepo.GetAllInternships();

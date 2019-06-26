@@ -9,81 +9,92 @@ using Utn.PWA.Repository.Interfaces;
 
 namespace Utn.PWA.Repository.Repositories
 {
-    public class StudentRepository :  IStudentRepository
+    public class StudentRepository : BaseRepository, IStudentRepository
     {
         private readonly IMapper _mapper;
-        public StudentRepository(IMapper mapper)
+        public StudentRepository(IMapper mapper, Utn_SysContext context) : base(context)
         {
             _mapper = mapper;
         }
 
         public List<StudentDTO> GetAllStudents()
         {
-            using (var ctx = new Utn_SysContext())
-            {
-                return ctx.Students.AsNoTracking()
-                                .Include(s => s.Career)
-                                    .Select(s =>
-                                        _mapper.Map<StudentDTO>(s)
-                                    ).ToList();
-            }
+            return ctx.Students.AsNoTracking()
+                            .Include(s => s.Career)
+                                .Select(s =>
+                                    _mapper.Map<StudentDTO>(s)
+                                ).ToList();
         }
 
         public StudentDTO GetStudentById(int Id)
         {
-            using (var ctx = new Utn_SysContext())
-            {
-                return _mapper.Map<StudentDTO>(ctx.Students.AsNoTracking()
-                                .Include(d => d.Career)
-                                    .Where(s => s.Id.Equals(Id))
-                                        .FirstOrDefault());
-            }
+            
+            return _mapper.Map<StudentDTO>(ctx.Students.AsNoTracking()
+                            .Include(d => d.Career)
+                                .Where(s => s.Id.Equals(Id))
+                                    .FirstOrDefault());
         }
         public bool Delete(StudentDTO student)
         {
-            using (var ctx = new Utn_SysContext())
-            {
-                ctx.Students.Remove(_mapper.Map<Students>(student));
-                ctx.SaveChanges();
-                return true;
-            }
+            ctx.Students.Remove(_mapper.Map<Students>(student));
+            ctx.SaveChanges();
+            return true;
         }
         public bool CreateOrUpdate(StudentDTO student)
         {
-            try
+            var oStudent = ctx.Students
+                            .Where(c => c.Id == student.Id)
+                                .FirstOrDefault();
+
+            if (oStudent == null)
             {
-                using (var ctx = new Utn_SysContext())
-                {
-                    var oStudent = ctx.Students.AsNoTracking()
-                                    .Where(c => c.Id == student.Id)
-                                        .FirstOrDefault();
-
-                    if (oStudent == null)
-                    {
-                        oStudent = new Students();
-                        ctx.Students.Add(oStudent);
-                    }
-                    else
-                    {
-                        ctx.Students.Attach(oStudent);
-                    }
-                    oStudent.Names = student.Names;
-                    oStudent.Surnames = student.Surnames;
-                    oStudent.Email = student.Email;
-                    oStudent.Birthdate = student.Birthdate;
-                    oStudent.Cuil = student.Cuil;
-                    oStudent.Dni = student.Dni;
-                    oStudent.Deleted = false;
-                    oStudent.Address = student.Address;
-
-                    ctx.SaveChanges();
-                    return true;
-                }
+                oStudent = new Students();
+                ctx.Students.Add(oStudent);
             }
-            catch (Exception ex)
+            else
+            {
+                ctx.Students.Attach(oStudent);
+            }
+            oStudent.Names = student.Names;
+            oStudent.Surnames = student.Surnames;
+            oStudent.Email = student.Email;
+            oStudent.Birthdate = student.Birthdate;
+            oStudent.Cuil = student.Cuil;
+            oStudent.Dni = student.Dni;
+            oStudent.Deleted = false;
+            oStudent.Address = student.Address;
+            oStudent.TeacherGuideId = student.TeacherGuideId;
+            oStudent.CareerId = student.CareerId;
+            oStudent.Sex = student.Sex;
+            oStudent.File = student.Dni + student.Cuil;
+
+
+            ctx.SaveChanges();
+            return true;
+        }
+
+        public bool ValidateCuil(string cuil)
+        {
+            var oStudent = ctx.Students.Where(s => s.Cuil == cuil).FirstOrDefault();
+
+            if (oStudent == null)
             {
                 return false;
             }
+
+            return true;
+        }
+
+        public bool ValidateDni(string dni)
+        {
+            var oStudent = ctx.Students.Where(s => s.Dni == dni).FirstOrDefault();
+
+            if (oStudent == null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
     }

@@ -7,6 +7,7 @@ namespace Utn.PWA.Repository.Interfaces
     public interface IInternshipRepository
     {
         List<InternshipDTO> GetAllInternships();
+        List<InternshipDTO> FilterGetAllInternship(InternshipFilterDTO filter);
         InternshipDTO GetInternshipById(int Id);
         bool CreateOrUpdate(InternshipDTO internship, int userId);
         bool Delete(InternshipDTO internship);

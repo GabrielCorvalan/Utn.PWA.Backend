@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Utn.PWA.Api.AutoMapper;
 using Utn.PWA.Api.Middlewares;
+using Utn.PWA.Entity.Models;
 using Utn.PWA.Helpers;
 
 namespace Utn.PWA.Api
@@ -29,6 +31,9 @@ namespace Utn.PWA.Api
 
             services.AddAutoMapper();
 
+            services.AddDbContext<Utn_SysContext>(options =>
+                options.UseSqlServer("Server=tcp:utnfrgp.database.windows.net,1433;Initial Catalog=PASANTIAS_UTNFRGP;Persist Security Info=False;User ID=gabrielcn6;Password=$Utnfrgp%;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"));
+
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MapperProfile());
@@ -36,7 +41,9 @@ namespace Utn.PWA.Api
 
             services.AddSwagger();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(config => {
+                config.Filters.Add(typeof(ApiExceptionFilter));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDependencyInyection();
 
@@ -89,6 +96,7 @@ namespace Utn.PWA.Api
             {
                 app.UseHsts();
             }
+            app.ConfigureExceptionHandler();
             app.UseCors("AllowMyOrigin");
             app.UseHttpsRedirection();
             app.UseAuthentication();

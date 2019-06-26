@@ -31,7 +31,7 @@ namespace Utn.PWA.Api.Controllers
             new Person() { Name = "Robert King", DOB = DateTime.Parse("1960-05-29"), Email = "robert.king@test.com" },
             new Person() { Name = "Laura Callahan", DOB = DateTime.Parse("1958-01-09"), Email = "laura.callahan@test.com" },
             new Person() { Name = "Anne Dodsworth", DOB = DateTime.Parse("1966-01-27"), Email = "anne.dodsworth@test.com" }
-            };
+        };
 
         // GET api/values  
         [HttpGet]

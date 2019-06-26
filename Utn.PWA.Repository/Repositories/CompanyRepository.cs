@@ -9,77 +9,58 @@ using Utn.PWA.Repository.Interfaces;
 
 namespace Utn.PWA.Repository.Repositories
 {
-    public class CompanyRepository : ICompanyRepository
+    public class CompanyRepository : BaseRepository, ICompanyRepository
     {
         private readonly IMapper _mapper;
-        public CompanyRepository(IMapper mapper)
+        public CompanyRepository(IMapper mapper, Utn_SysContext context) : base(context)
         {
             _mapper = mapper;
         }
 
         public List<CompanyDTO> GetAllCompanies()
         {
-            using (var ctx = new Utn_SysContext())
-            {
-                return ctx.Companies.AsNoTracking()
-                                    .Select(s =>
-                                        _mapper.Map<CompanyDTO>(s)
-                                    ).ToList();
-            }
+            return ctx.Companies.AsNoTracking()
+                                .Select(s =>
+                                    _mapper.Map<CompanyDTO>(s)
+                                ).ToList();
         }
 
         public CompanyDTO GetCompanyById(int Id)
         {
-            using (var ctx = new Utn_SysContext())
-            {
-                return _mapper.Map<CompanyDTO>(ctx.Companies
-                                    .AsNoTracking()
-                                        .Where(s => s.Id.Equals(Id))
-                                            .FirstOrDefault());
-            }
+            return _mapper.Map<CompanyDTO>(ctx.Companies
+                                .AsNoTracking()
+                                    .Where(s => s.Id.Equals(Id))
+                                        .FirstOrDefault());
         }
         public bool Delete(CompanyDTO company)
         {
-            using (var ctx = new Utn_SysContext())
-            {
-                ctx.Companies.Remove(_mapper.Map<Companies>(company));
-                ctx.SaveChanges();
-                return true;
-            }
+            ctx.Companies.Remove(_mapper.Map<Companies>(company));
+            ctx.SaveChanges();
+            return true;
         }
         public bool CreateOrUpdate(CompanyDTO company)
         {
-            try
-            {
-                using (var ctx = new Utn_SysContext())
-                {
-                    var oCompany = ctx.Companies.AsNoTracking()
-                                    .Where(c => c.Id == company.Id)
-                                        .FirstOrDefault();
+            var oCompany = ctx.Companies.AsNoTracking()
+                            .Where(c => c.Id == company.Id)
+                                .FirstOrDefault();
 
-                    if (oCompany == null)
-                    {
-                        oCompany = new Companies();
-                        ctx.Companies.Add(oCompany);
-                    }
-                    else
-                    {
-                        ctx.Companies.Attach(oCompany);
-                    }
-                    oCompany.Address = company.Address;
-                    oCompany.Cuit = company.Cuit;
-                    oCompany.Email = company.Email;
-                    oCompany.Name = company.Name;
-                    oCompany.Deleted = false;
-
-                    ctx.SaveChanges();
-                    return true;
-                }
-            }
-            catch (Exception ex)
+            if (oCompany == null)
             {
-                return false;
+                oCompany = new Companies();
+                ctx.Companies.Add(oCompany);
             }
+            else
+            {
+                ctx.Companies.Attach(oCompany);
+            }
+            oCompany.Address = company.Address;
+            oCompany.Cuit = company.Cuit;
+            oCompany.Email = company.Email;
+            oCompany.Name = company.Name;
+            oCompany.Deleted = false;
+
+            ctx.SaveChanges();
+            return true;
         }
 
     }

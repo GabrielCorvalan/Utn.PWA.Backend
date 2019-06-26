@@ -9,5 +9,7 @@ namespace Utn.PWA.Repository.Interfaces
         StudentDTO GetStudentById(int Id);
         bool CreateOrUpdate(StudentDTO student);
         bool Delete(StudentDTO student);
+        bool ValidateDni(string dni);
+        bool ValidateCuil(string cuil);
     }
 }

@@ -31,5 +31,15 @@ namespace Utn.PWA.Services.Services
         {
             return studentRepo.Delete(student);
         }
+
+        public bool ValidateDni(string dni)
+        {
+            return studentRepo.ValidateDni(dni);
+        }
+
+        public bool ValidateCuil(string cuil)
+        {
+            return studentRepo.ValidateCuil(cuil);
+        }
     }
 }

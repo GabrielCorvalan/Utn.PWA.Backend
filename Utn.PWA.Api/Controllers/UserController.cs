@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Utn.PWA.DTOs;
+using Utn.PWA.Repository.Interfaces;
 using Utn.PWA.Services.Interfaces;
 
 namespace Utn.PWA.Api.Controllers
@@ -11,21 +12,21 @@ namespace Utn.PWA.Api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserService userService;
+        private readonly IUserRepository userRepository;
 
-        public UserController(IUserService service)
+        public UserController(IUserRepository service)
         {
-            userService = service;
+            userRepository = service;
         }
 
         [AllowAnonymous]
         [HttpPost("Auth")]
         public IActionResult Authenticate([FromBody]UserLoginDTO userParam)
         {
-            var token = userService.Authenticate(userParam);
+            var token = userRepository.Authenticate(userParam);
 
             if (token == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return  Unauthorized();
 
             return Ok(token);
         }

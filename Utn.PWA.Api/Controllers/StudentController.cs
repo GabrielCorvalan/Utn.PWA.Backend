@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Utn.PWA.DTOs;
+using Utn.PWA.Helpers;
 using Utn.PWA.Services.Interfaces;
 
 namespace Utn.PWA.Api.Controllers
@@ -38,15 +39,13 @@ namespace Utn.PWA.Api.Controllers
         [Produces("application/json", Type = typeof(StudentDTO))]
         public IActionResult GetStudentById(int id)
         {
-            try
-            {
-                return Ok(studentService.GetStudentById(id));
-            }
-            catch (Exception)
-            {
+            var student = studentService.GetStudentById(id);
 
-                throw;
+            if (student == null) 
+            {
+                return NotFound(new ApiResponse(404, $"No se encontro el estudiante con id {id}"));
             }
+            return Ok(student);
         }
 
         [HttpDelete("{id}")]
@@ -70,14 +69,41 @@ namespace Utn.PWA.Api.Controllers
         [Produces("application/json", Type = typeof(bool))]
         public IActionResult Post([FromBody]StudentDTO student)
         {
+            var result = studentService.CreateOrUpdate(student);
+            return Ok(new ApiOkResponse(new {succes = result, message = "Estudiante creado correctamente"}));
+        }
+
+        [HttpGet("validateDni")]
+        [Produces("application/json", Type = typeof(bool))]
+        public IActionResult ValidateDni([FromQuery]string dni)
+        {
             try
             {
-                return Ok(studentService.CreateOrUpdate(student));
+                var isInvalid = studentService.ValidateDni(dni);
+
+                return Ok(isInvalid);
             }
             catch (Exception ex)
             {
 
                 throw ex;
+            }
+        }
+
+        [HttpGet("validateCuil")]
+        [Produces("application/json", Type = typeof(bool))]
+        public IActionResult ValidateCuil([FromQuery]string cuil)
+        {
+            try
+            {
+                var isInvalid = studentService.ValidateCuil(cuil);
+
+                return Ok(isInvalid);
+            }
+            catch (Exception ex)
+            {
+
+                return NotFound(new ApiResponse(500, ex.InnerException.Message));
             }
         }
     }
